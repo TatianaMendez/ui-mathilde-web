@@ -1,0 +1,78 @@
+{
+  "name": "ui-mathilde-web",
+  "version": "0.0.5",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/ui-mathilde-web.umd.cjs",
+  "module": "./dist/ui-mathilde-web.js",
+  "exports": {
+    ".": {
+      "import": "./dist/ui-mathilde-web.js",
+      "require": "./dist/ui-mathilde-web.umd.cjs"
+    },
+    "./dist/style.css": "./dist/style.css"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "format": "prettier . --write",
+    "format:check": "prettier . --check",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "typecheck": "tsc --noEmit",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
+  },
+  "peerDependencies": {
+    "flowbite-react": "^0.8.0",
+    "react": "^18.2.0",
+    "react-chartjs-2": "^5.3.0",
+    "react-dom": "^18.2.0",
+    "react-pro-sidebar": "^1.1.0",
+    "react-router-dom": "^7.4.0"
+  },
+  "devDependencies": {
+    "@chromatic-com/storybook": "^3.2.6",
+    "@storybook/addon-essentials": "^8.6.10",
+    "@storybook/addon-interactions": "^8.6.10",
+    "@storybook/addon-onboarding": "^8.6.10",
+    "@storybook/blocks": "^8.6.10",
+    "@storybook/react": "^8.6.10",
+    "@storybook/react-vite": "^8.6.10",
+    "@storybook/test": "^8.6.10",
+    "@types/node": "^22.13.13",
+    "@types/react": "^18.2.67",
+    "@types/react-dom": "^18.2.22",
+    "@typescript-eslint/eslint-plugin": "^7.3.1",
+    "@typescript-eslint/parser": "^7.3.1",
+    "@vitejs/plugin-react": "^4.2.1",
+    "autoprefixer": "^10.4.18",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.6",
+    "eslint-plugin-storybook": "^0.12.0",
+    "eslint-plugin-tailwindcss": "^3.15.1",
+    "flowbite-react": "^0.8.0",
+    "postcss": "^8.4.37",
+    "prettier-plugin-tailwindcss": "^0.5.12",
+    "react": "^18.2.0",
+    "react-chartjs-2": "^5.3.0",
+    "react-dom": "^18.2.0",
+    "react-pro-sidebar": "^1.1.0",
+    "react-router-dom": "^7.4.0",
+    "storybook": "^8.6.10",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5.4.2",
+    "vite": "^5.2.0",
+    "vite-plugin-dts": "^4.5.3"
+  },
+  "dependencies": {
+    "clsx": "^2.1.1",
+    "formik": "^2.4.6",
+    "tailwind-merge": "^3.0.2"
+  }
+}
