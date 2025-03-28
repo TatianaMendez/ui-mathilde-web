@@ -1,86 +1,119 @@
 import * as React from 'react';
-import { Table } from "flowbite-react";
+import { Table, TextInput } from "flowbite-react";
+import { HiSearch } from 'react-icons/hi';
+import { CustomPagination } from '@components/molecules/pagination/pagination';
 
-export const TableComponent: React.FC = () => {
+interface Column {
+  header: string;
+  accessor: string;
+  cell?: (row: any) => React.ReactNode;
+}
+
+interface TableComponentProps {
+  columns: Column[];
+  data: any[];
+  showSearch?: boolean;
+  itemsPerPage?: number;
+  title?: string;
+}
+
+export const TableComponent: React.FC<TableComponentProps> = ({
+  columns,
+  data,
+  showSearch = false,
+  itemsPerPage = 5,
+  title
+}) => {
+  const [searchTerm, setSearchTerm] = React.useState('');
+  const [currentPage, setCurrentPage] = React.useState(1);
+
+  // Filtrar datos basados en el término de búsqueda
+  const filteredData = React.useMemo(() => {
+    if (!searchTerm.trim()) return data;
+    
+    return data.filter(item =>
+      columns.some(column => {
+        const value = item[column.accessor];
+        return value != null && 
+          value.toString()
+            .toLowerCase()
+            .includes(searchTerm.toLowerCase().trim());
+      })
+    );
+  }, [data, searchTerm, columns]);
+
+  // Calcular datos paginados
+  const paginatedData = React.useMemo(() => {
+    const firstPageIndex = (currentPage - 1) * itemsPerPage;
+    const lastPageIndex = firstPageIndex + itemsPerPage;
+    return filteredData.slice(firstPageIndex, lastPageIndex);
+  }, [filteredData, currentPage, itemsPerPage]);
+
+  // Calcular total de páginas
+  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
   return (
     <div className="w-full">
+      {/* Header con título y búsqueda */}
+      <div className="flex justify-between items-center mb-4">
+        {title && <h2 className="text-xl font-bold">{title}</h2>}
+      </div>
+
+      <div className='flex mb-4'>
+        {showSearch && (
+          <div className="w-1/2">
+            <TextInput
+              rightIcon={HiSearch}
+              placeholder="Buscar"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
+        )}
+
+        {totalPages > 1 && (
+          <div className='w-full flex justify-end'>
+            <CustomPagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={setCurrentPage}
+            />
+          </div>
+        )}
+      </div>
+
+      {/* Tabla */}
       <div className="overflow-x-auto">
-      <Table striped>
-        <Table.Head>
-          <Table.HeadCell>Product name</Table.HeadCell>
-          <Table.HeadCell>Color</Table.HeadCell>
-          <Table.HeadCell>Category</Table.HeadCell>
-          <Table.HeadCell>Price</Table.HeadCell>
-          <Table.HeadCell>
-            <span className="sr-only">Edit</span>
-          </Table.HeadCell>
-        </Table.Head>
-        <Table.Body className="divide-y">
-          <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
-            <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-              {'Apple MacBook Pro 17"'}
-            </Table.Cell>
-            <Table.Cell>Sliver</Table.Cell>
-            <Table.Cell>Laptop</Table.Cell>
-            <Table.Cell>$2999</Table.Cell>
-            <Table.Cell>
-              <a href="#" className="font-medium text-cyan-600 hover:underline dark:text-cyan-500">
-                Edit
-              </a>
-            </Table.Cell>
-          </Table.Row>
-          <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
-            <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-              Microsoft Surface Pro
-            </Table.Cell>
-            <Table.Cell>White</Table.Cell>
-            <Table.Cell>Laptop PC</Table.Cell>
-            <Table.Cell>$1999</Table.Cell>
-            <Table.Cell>
-              <a href="#" className="font-medium text-cyan-600 hover:underline dark:text-cyan-500">
-                Edit
-              </a>
-            </Table.Cell>
-          </Table.Row>
-          <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
-            <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">Magic Mouse 2</Table.Cell>
-            <Table.Cell>Black</Table.Cell>
-            <Table.Cell>Accessories</Table.Cell>
-            <Table.Cell>$99</Table.Cell>
-            <Table.Cell>
-              <a href="#" className="font-medium text-cyan-600 hover:underline dark:text-cyan-500">
-                Edit
-              </a>
-            </Table.Cell>
-          </Table.Row>
-          <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
-            <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-              Google Pixel Phone
-            </Table.Cell>
-            <Table.Cell>Gray</Table.Cell>
-            <Table.Cell>Phone</Table.Cell>
-            <Table.Cell>$799</Table.Cell>
-            <Table.Cell>
-              <a href="#" className="font-medium text-cyan-600 hover:underline dark:text-cyan-500">
-                Edit
-              </a>
-            </Table.Cell>
-          </Table.Row>
-          <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
-            <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">Apple Watch 5</Table.Cell>
-            <Table.Cell>Red</Table.Cell>
-            <Table.Cell>Wearables</Table.Cell>
-            <Table.Cell>$999</Table.Cell>
-            <Table.Cell>
-              <a href="#" className="font-medium text-cyan-600 hover:underline dark:text-cyan-500">
-                Edit
-              </a>
-            </Table.Cell>
-          </Table.Row>
-        </Table.Body>
-      </Table>
-    </div>
+        <Table striped>
+          <Table.Head>
+            {columns.map((column, index) => (
+              <Table.HeadCell key={index}>
+                {column.header}
+              </Table.HeadCell>
+            ))}
+          </Table.Head>
+          
+          <Table.Body className="divide-y">
+            {paginatedData.map((row, rowIndex) => (
+              <Table.Row 
+                key={rowIndex} 
+                className="bg-white dark:border-gray-700 dark:bg-gray-800"
+              >
+                {columns.map((column, colIndex) => (
+                  <Table.Cell 
+                    key={colIndex}
+                    className="whitespace-nowrap font-medium text-gray-900 dark:text-white"
+                  >
+                    {column.cell 
+                      ? column.cell(row)
+                      : row[column.accessor]}
+                  </Table.Cell>
+                ))}
+              </Table.Row>
+            ))}
+          </Table.Body>
+        </Table>
+      </div>
     </div>
   );
 };

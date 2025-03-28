@@ -1,6 +1,6 @@
 {
   "name": "ui-mathilde-web",
-  "version": "0.0.5",
+  "version": "0.0.7",
   "type": "module",
   "files": [
     "dist"
