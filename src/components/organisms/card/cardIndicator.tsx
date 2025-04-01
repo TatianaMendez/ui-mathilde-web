@@ -1,5 +1,5 @@
 // components/Modal.tsx
-import ImageFormat from '@components/molecules/image/imageFormat';
+import ImageFormat from '@/components/atoms/image/imageFormat';
 import type { CardIndicatorProps } from './card.types';
 import ProgressBar from '@components/molecules/progressBar/progressBar';
 import { getBaseUrl } from '@utils/getBaseUrl';
@@ -15,7 +15,7 @@ export const CardIndicator: React.FC<CardIndicatorProps> = ({ logo, number, titl
     };
 
     return (
-      <div className='flex flex-col border px-3.5 py-7'>
+      <div className='flex flex-col border px-3.5 py-7 bg-white'>
           <div className='flex justify-end'>
             <ImageFormat src={`${imagesPath}/public/assets/images/${logo}.svg`} alt='Icon' width={30} height={30}/>
           </div>

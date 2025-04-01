@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { TableComponent } from './table';
+import { TableComponent, type Column } from './table';
 
 const meta = {
   title: 'Organisms/Table',
@@ -14,7 +14,7 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 // Datos de ejemplo
-const sampleData = [
+const sampleData: Record<string, unknown>[] = [
   {
     productName: 'Apple MacBook Pro 17"',
     color: 'Silver',
@@ -30,7 +30,7 @@ const sampleData = [
   {
     productName: 'Magic Mouse 2',
     color: 'Black',
-    category: 'Accessories',
+    category: 'relationies',
     price: 99,
   },
   {
@@ -48,23 +48,23 @@ const sampleData = [
 ];
 
 // Columnas de ejemplo
-const sampleColumns = [
+const sampleColumns: Column[] = [
   {
     header: 'Producto',
-    accessor: 'productName',
+    relation: 'productName',
   },
   {
     header: 'Color',
-    accessor: 'color',
+    relation: 'color',
   },
   {
     header: 'Categoría',
-    accessor: 'category',
+    relation: 'category',
   },
   {
     header: 'Precio',
-    accessor: 'price',
-    cell: (row: any) => `$${row.price.toLocaleString()}`
+    relation: 'price',
+    cell: (row: Record<string, unknown>) => `$${(row.price as number).toLocaleString()}`
   }
 ];
 
@@ -96,14 +96,6 @@ export const CustomPagination: Story = {
   },
 };
 
-// Historia con datos vacíos
-export const EmptyTable: Story = {
-  args: {
-    ...Basic.args,
-    data: [],
-    title: 'Tabla sin datos',
-  },
-};
 
 // Historia con muchos datos
 export const ManyRows: Story = {
@@ -114,7 +106,7 @@ export const ManyRows: Story = {
       color: ['Red', 'Blue', 'Green', 'Yellow'][index % 4],
       category: ['Electronics', 'Clothing', 'Books', 'Sports'][index % 4],
       price: Math.floor(Math.random() * 1000) + 100,
-    })),
+    })) as Record<string, unknown>[],
     title: 'Tabla con muchos registros',
     showSearch: true,
   },
@@ -126,20 +118,20 @@ export const CustomColumns: Story = {
     columns: [
       {
         header: 'Producto',
-        accessor: 'productName',
-        cell: (row: any) => (
+        relation: 'productName',
+        cell: (row: Record<string, unknown>) => (
           <div className="flex items-center">
             <span className="w-2 h-2 rounded-full bg-green-500 mr-2"></span>
-            {row.productName}
+            {row.productName as string}
           </div>
         )
       },
       {
         header: 'Precio',
-        accessor: 'price',
-        cell: (row: any) => (
+        relation: 'price',
+        cell: (row: Record<string, unknown>) => (
           <span className="font-bold text-green-600">
-            ${row.price.toLocaleString()}
+            ${(row.price as number).toLocaleString()}
           </span>
         )
       },

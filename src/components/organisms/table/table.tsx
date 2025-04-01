@@ -3,15 +3,15 @@ import { Table, TextInput } from "flowbite-react";
 import { HiSearch } from 'react-icons/hi';
 import { CustomPagination } from '@components/molecules/pagination/pagination';
 
-interface Column {
+export interface Column {
   header: string;
-  accessor: string;
-  cell?: (row: any) => React.ReactNode;
+  relation: string;
+  cell?: (row: Record<string, unknown>) => React.ReactNode;
 }
 
-interface TableComponentProps {
+export interface TableComponentProps {
   columns: Column[];
-  data: any[];
+  data: Record<string, unknown>[];
   showSearch?: boolean;
   itemsPerPage?: number;
   title?: string;
@@ -33,9 +33,9 @@ export const TableComponent: React.FC<TableComponentProps> = ({
     
     return data.filter(item =>
       columns.some(column => {
-        const value = item[column.accessor];
+        const value = (item as Record<string, unknown>)[column.relation];
         return value != null && 
-          value.toString()
+          String(value)
             .toLowerCase()
             .includes(searchTerm.toLowerCase().trim());
       })
@@ -92,23 +92,26 @@ export const TableComponent: React.FC<TableComponentProps> = ({
               </Table.HeadCell>
             ))}
           </Table.Head>
+          <hr/>
           
           <Table.Body className="divide-y">
             {paginatedData.map((row, rowIndex) => (
               <Table.Row 
                 key={rowIndex} 
-                className="bg-white dark:border-gray-700 dark:bg-gray-800"
-              >
-                {columns.map((column, colIndex) => (
-                  <Table.Cell 
-                    key={colIndex}
-                    className="whitespace-nowrap font-medium text-gray-900 dark:text-white"
-                  >
-                    {column.cell 
-                      ? column.cell(row)
-                      : row[column.accessor]}
-                  </Table.Cell>
-                ))}
+                className="bg-white dark:border-gray-700 dark:bg-gray-800">
+                {columns.map((column, colIndex) => {
+                  const cellValue = (row as Record<string, unknown>)[column.relation];
+                  return (
+                    <Table.Cell 
+                      key={colIndex}
+                      className="whitespace-nowrap font-medium text-gray-900 dark:text-white"
+                    >
+                      {column.cell 
+                        ? column.cell(row)
+                        : cellValue != null ? String(cellValue) : ''}
+                    </Table.Cell>
+                  );
+                })}
               </Table.Row>
             ))}
           </Table.Body>

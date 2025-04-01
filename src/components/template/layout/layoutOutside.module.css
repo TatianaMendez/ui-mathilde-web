@@ -1,0 +1,15 @@
+.m-image-container {
+    position: absolute;
+    width: 500px;
+    height: 495px;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-end;
+    bottom: 0;
+  }
+  
+.m-image {
+    position: relative;
+    bottom: -55px;
+    right: 64px;
+}

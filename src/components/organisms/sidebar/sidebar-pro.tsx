@@ -1,7 +1,7 @@
 import { Sidebar, Menu, MenuItem, sidebarClasses } from 'react-pro-sidebar';
 import { useState } from 'react';
 import ModalFormat from '@components/organisms/modal/modalFormat';
-import ImageFormat from '@components/molecules/image/imageFormat';
+import ImageFormat from '@components/atoms/image/imageFormat';
 import CardFormat from '@components/organisms/card/cardFormat';
 import { getBaseUrl } from '@utils/getBaseUrl';
 
@@ -154,11 +154,11 @@ export const SidebarMth = () => {
             <h2 className='text-center font-bold mb-3'>Selecciona el tipo de campaña que quieres crear</h2>
             <div className='flex'>
               <div className="w-3/6 p-2">
-                  <CardFormat image='medios-propios' title='Medios Propios' description='Crea y administra campañas a los usuarios que ingresan a tus canales.'/>
+                  <CardFormat image={{"type": "image", "name": 'medios-propios'}} title='Medios Propios' description='Crea y administra campañas a los usuarios que ingresan a tus canales.'/>
               </div>
               <div className="w-3/6 p-2">
               <Link to="/thirdPartyCampaign">
-                  <CardFormat image='medios-pagos' title='Medios Pagos' description='Activa campañas de Marketing Digital usando inventario de Redes Sociales y Google.'/>
+                  <CardFormat image={{"type": "image", "name": 'medios-pagos'}}  title='Medios Pagos' description='Activa campañas de Marketing Digital usando inventario de Redes Sociales y Google.'/>
               </Link>
               </div>
             </div>

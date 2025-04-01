@@ -1,5 +1,6 @@
 export interface CardProps {
     image: string, 
+    icon:string,
     title: string,
     description: string
 }

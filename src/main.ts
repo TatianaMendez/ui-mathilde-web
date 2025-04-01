@@ -2,7 +2,7 @@ import './index.css';
 
 export { ButtonFormat } from './components/molecules/button/buttonFormat';
 export { Checkbox } from './components/molecules/checkbox/checkbox';
-export { ImageFormat } from './components/molecules/image/imageFormat';
+export { ImageFormat } from './components/atoms/image/imageFormat';
 export { InputForm } from './components/molecules/input/inputForm';
 export { PasswordInput } from './components/molecules/input/passwordInput';
 export { ProgressBar } from './components/molecules/progressBar/progressBar';
