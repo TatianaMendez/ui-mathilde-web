@@ -3,7 +3,7 @@ import { ButtonFormat } from './buttonFormat';
 import { HiArrowRight, HiArrowLeft } from 'react-icons/hi';
 import { FaGoogle } from 'react-icons/fa';
 
-export const meta = {
+const meta = {
   title: 'Molecules/ButtonFormat',
   component: ButtonFormat,
   parameters: {
@@ -98,8 +98,5 @@ export const CustomIconSize: Story = {
   args: {
     ...Default.args,
     txtBtn: 'Large Icons',
-    leftIcon: FaGoogle,
-    rightIcon: HiArrowRight,
-    iconSize: 24,
   },
 };

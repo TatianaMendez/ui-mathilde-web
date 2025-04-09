@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { Dropzone } from './dropzone';
 
-export const meta = {
+const meta = {
   title: 'Organisms/Dropzone',
   component: Dropzone,
   parameters: {
@@ -21,10 +21,13 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 // Historia básica
-export const Default: Story = {};
+export const Default: Story = {
+  args: {},
+};
 
 // Historia con fondo oscuro
 export const DarkMode: Story = {
+  args: {},
   parameters: {
     backgrounds: {
       default: 'dark',

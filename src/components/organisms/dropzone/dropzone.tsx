@@ -2,8 +2,9 @@ import { FileInput, Label } from 'flowbite-react';
 import ImageFormat from '@components/atoms/image/imageFormat';
 
 export interface DropzoneProps {
-    onChange?: () => void;
+    onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void; 
 }
+
 
 export const Dropzone: React.FC<DropzoneProps> = ({onChange}) => {
   return (
@@ -12,7 +13,7 @@ export const Dropzone: React.FC<DropzoneProps> = ({onChange}) => {
         htmlFor="dropzone-file"
         className="flex h-64 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:border-gray-500 dark:hover:bg-gray-600"
       >
-        <div className="flex w-2/4 items-center justify-center pb-6 pt-5">
+        <div className="flex lg:w-1/4 md:w-2/4 items-center justify-center pb-6 pt-5">
           <ImageFormat
             classIm="mr-3"
             src='../../../../public/assets/images/file.svg'

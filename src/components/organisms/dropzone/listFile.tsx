@@ -4,6 +4,7 @@ import { ImBin } from 'react-icons/im';
 
 export interface ListFileProps {
   files: File[];
+  onDelete: (fileToDelete: File) => void;
 }
 
 const formatFileSize = (size: number): string => {
@@ -12,12 +13,15 @@ const formatFileSize = (size: number): string => {
   return `${(size / Math.pow(1024, i)).toFixed(2)} ${sizes[i]}`;
 };
 
-export const ListFile: React.FC<ListFileProps> = ({ files }) => {
+export const ListFile: React.FC<ListFileProps> = ({ files, onDelete }) => {
   return (
     <div className="mt-4">
-      <ul className="list-disc pl-5">
+      <ul className="list-disc">
         {files.map((file, index) => (
-          <div className="mb-5 flex w-full cursor-pointer items-center justify-between rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 p-4 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:border-gray-500 dark:hover:bg-gray-600">
+          <div 
+            key={index} 
+            className="mb-5 flex w-full items-center justify-between rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 p-4 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:border-gray-500 dark:hover:bg-gray-600"
+          >
             <div className="flex items-center">
               <ImageFormat
                 classIm="mr-3"
@@ -25,13 +29,16 @@ export const ListFile: React.FC<ListFileProps> = ({ files }) => {
                 alt="icon dropzone"
                 width={50}
               />
-              <li key={index} className="text-base font-semibold text-gray-700">
+              <li className="text-base font-semibold text-gray-700">
                 {file.name}
               </li>
             </div>
             <div className="mx-4 flex items-center">
               <span className="flex text-sm">{formatFileSize(file.size)}</span>
-              <ImBin className="ml-2 text-4xl text-gray-400" />
+              <ImBin 
+                className="ml-2 text-4xl text-gray-400 cursor-pointer" 
+                onClick={() => onDelete(file)}
+              />
             </div>
           </div>
         ))}

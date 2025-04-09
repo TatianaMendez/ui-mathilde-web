@@ -1,18 +1,17 @@
-import type { StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react';
 import ListFile from './listFile';
 
-export const ValuesStories = {
+const meta = {
   title: 'Organisms/ListFile',
   component: ListFile,
   parameters: {
     layout: 'centered',
   },
   tags: ['autodocs'],
-} as const;
+} satisfies Meta<typeof ListFile>;
 
-export default ValuesStories;
-
-type Story = StoryObj<typeof ListFile>;
+export default meta;
+type Story = StoryObj<typeof meta>;
 
 // Crear archivos de ejemplo
 const createMockFile = (name: string, type: string, size: number): File => {
@@ -27,10 +26,16 @@ const sampleFiles = [
   createMockFile('hoja-calculo.xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 512000), // 500KB
 ];
 
+// Función mock para onDelete
+const mockOnDelete = (file: File) => {
+  console.log('Archivo eliminado:', file.name);
+};
+
 // Historia con un solo archivo
 export const SingleFile: Story = {
   args: {
     files: [sampleFiles[0]],
+    onDelete: mockOnDelete,
   },
 };
 
@@ -38,6 +43,7 @@ export const SingleFile: Story = {
 export const MultipleFiles: Story = {
   args: {
     files: sampleFiles,
+    onDelete: mockOnDelete,
   },
 };
 
@@ -45,6 +51,7 @@ export const MultipleFiles: Story = {
 export const EmptyList: Story = {
   args: {
     files: [],
+    onDelete: mockOnDelete,
   },
 };
 
@@ -58,6 +65,7 @@ export const ManyFiles: Story = {
         Math.floor(Math.random() * 5000000) + 1000000 // Tamaños aleatorios entre 1MB y 6MB
       )
     ),
+    onDelete: mockOnDelete,
   },
 };
 
@@ -68,6 +76,7 @@ export const LongFileNames: Story = {
       createMockFile('este-es-un-nombre-de-archivo-muy-largo-que-podria-causar-problemas-de-diseño.pdf', 'application/pdf', 1024576),
       createMockFile('otro-archivo-con-nombre-extremadamente-largo-para-probar-el-comportamiento.jpg', 'image/jpeg', 2048576),
     ],
+    onDelete: mockOnDelete,
   },
 };
 
@@ -80,6 +89,7 @@ export const DifferentFileTypes: Story = {
       createMockFile('archivo.zip', 'application/zip', 5120000), // 5MB
       createMockFile('presentacion.pptx', 'application/vnd.openxmlformats-officedocument.presentationml.presentation', 3072576), // 3MB
     ],
+    onDelete: mockOnDelete,
   },
   render: (args) => (
     <div className="w-[400px]">
