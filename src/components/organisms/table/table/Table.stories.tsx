@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { TableComponent, type Column } from './table';
+import { TableComponent } from './table';
+import { type Column } from './table.types';
 
 const meta = {
   title: 'Organisms/Table',
@@ -64,8 +65,9 @@ const sampleColumns: Column[] = [
   {
     header: 'Precio',
     relation: 'price',
-    cell: (row: Record<string, unknown>) => `$${(row.price as number).toLocaleString()}`
-  }
+    cell: (row: Record<string, unknown>) =>
+      `$${(row.price as number).toLocaleString()}`,
+  },
 ];
 
 // Historia básica
@@ -96,17 +98,18 @@ export const CustomPagination: Story = {
   },
 };
 
-
 // Historia con muchos datos
 export const ManyRows: Story = {
   args: {
     ...Basic.args,
-    data: Array(20).fill(null).map((_, index) => ({
-      productName: `Producto ${index + 1}`,
-      color: ['Red', 'Blue', 'Green', 'Yellow'][index % 4],
-      category: ['Electronics', 'Clothing', 'Books', 'Sports'][index % 4],
-      price: Math.floor(Math.random() * 1000) + 100,
-    })) as Record<string, unknown>[],
+    data: Array(20)
+      .fill(null)
+      .map((_, index) => ({
+        productName: `Producto ${index + 1}`,
+        color: ['Red', 'Blue', 'Green', 'Yellow'][index % 4],
+        category: ['Electronics', 'Clothing', 'Books', 'Sports'][index % 4],
+        price: Math.floor(Math.random() * 1000) + 100,
+      })) as Record<string, unknown>[],
     title: 'Tabla con muchos registros',
     showSearch: true,
   },
@@ -121,10 +124,10 @@ export const CustomColumns: Story = {
         relation: 'productName',
         cell: (row: Record<string, unknown>) => (
           <div className="flex items-center">
-            <span className="w-2 h-2 rounded-full bg-green-500 mr-2"></span>
+            <span className="mr-2 h-2 w-2 rounded-full bg-green-500"></span>
             {row.productName as string}
           </div>
-        )
+        ),
       },
       {
         header: 'Precio',
@@ -133,7 +136,7 @@ export const CustomColumns: Story = {
           <span className="font-bold text-green-600">
             ${(row.price as number).toLocaleString()}
           </span>
-        )
+        ),
       },
     ],
     data: sampleData,
@@ -154,4 +157,4 @@ export const DarkTheme: Story = {
     },
     theme: 'dark',
   },
-}; 
+};

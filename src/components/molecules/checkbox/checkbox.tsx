@@ -8,7 +8,12 @@ interface CheckboxProps {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-export const Checkbox: React.FC<CheckboxProps> = ({ label, value, checked, onChange }) => {
+export const Checkbox: React.FC<CheckboxProps> = ({
+  label,
+  value,
+  checked,
+  onChange,
+}) => {
   return (
     <label className={styles['checkbox-container']}>
       <input
@@ -23,4 +28,4 @@ export const Checkbox: React.FC<CheckboxProps> = ({ label, value, checked, onCha
   );
 };
 
-export default Checkbox; 
+export default Checkbox;

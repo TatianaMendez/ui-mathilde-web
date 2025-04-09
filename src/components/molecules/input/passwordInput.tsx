@@ -1,14 +1,20 @@
 import React, { useState } from 'react';
-import { FaEye, FaEyeSlash } from 'react-icons/fa'; 
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import style from './passwordInput.module.css';
 
-interface PasswordInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+interface PasswordInputProps
+  extends React.InputHTMLAttributes<HTMLInputElement> {
   placeholder: string;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void; 
-  value?: string; 
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  value?: string;
 }
 
-export const PasswordInput: React.FC<PasswordInputProps> = ({ placeholder, onChange, value, ...props }) => {
+export const PasswordInput: React.FC<PasswordInputProps> = ({
+  placeholder,
+  onChange,
+  value,
+  ...props
+}) => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const togglePasswordVisibility = () => {
@@ -17,19 +23,20 @@ export const PasswordInput: React.FC<PasswordInputProps> = ({ placeholder, onCha
 
   return (
     <div className="mb-5">
-      <div className='w-full relative inline-block'>
+      <div className="relative inline-block w-full">
         <input
           type={showPassword ? 'text' : 'password'}
-          value={value} 
-          className='w-full pr-10 p-2 border'
-          onChange={onChange} 
+          value={value}
+          className="w-full border p-2 pr-10"
+          onChange={onChange}
           placeholder={placeholder}
-          {...props} 
+          {...props}
         />
-        <button 
+        <button
           type="button"
           onClick={togglePasswordVisibility}
-          className={style['mth-password']}>
+          className={style['mth-password']}
+        >
           {showPassword ? <FaEyeSlash /> : <FaEye />}
         </button>
       </div>

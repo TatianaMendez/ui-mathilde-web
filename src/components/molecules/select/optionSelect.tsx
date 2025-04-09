@@ -1,5 +1,4 @@
 export interface optionSelect {
-    value: string;
-    label: string;
-    
+  value: string;
+  label: string;
 }

@@ -17,7 +17,7 @@ const usePasswordValidation = () => {
     hasNumber: false,
     hasUpperCase: false,
     hasLowerCase: false,
-    hasSpecialChar: false
+    hasSpecialChar: false,
   });
 
   useEffect(() => {
@@ -26,15 +26,17 @@ const usePasswordValidation = () => {
       hasNumber: /\d/.test(password),
       hasUpperCase: /[A-Z]/.test(password),
       hasLowerCase: /[a-z]/.test(password),
-      hasSpecialChar: /[!@#$%^&*(),.?":{}|<>]/.test(password)
+      hasSpecialChar: /[!@#$%^&*(),.?":{}|<>]/.test(password),
     });
   }, [password]);
 
   const isPasswordValid = () => {
-    return password.trim() && 
-           confirmPassword.trim() && 
-           password === confirmPassword &&
-           Object.values(validations).every(v => v);
+    return (
+      password.trim() &&
+      confirmPassword.trim() &&
+      password === confirmPassword &&
+      Object.values(validations).every((v) => v)
+    );
   };
 
   const showError = () => {
@@ -47,7 +49,7 @@ const usePasswordValidation = () => {
     confirmPassword,
     setConfirmPassword,
     showError,
-    validations
+    validations,
   };
 };
 

@@ -1,8 +1,8 @@
 // components/Modal.tsx
 import { forwardRef } from 'react';
-import styles from './modal.module.css'; 
+import styles from './modal.module.css';
 import type { ModalProps } from './modal.types';
-import { IoIosCloseCircle } from "react-icons/io";
+import { IoIosCloseCircle } from 'react-icons/io';
 
 export const ModalFormat = forwardRef<HTMLDivElement, ModalProps>(
   ({ isOpen, onClose, children, width = 'auto' }, ref) => {

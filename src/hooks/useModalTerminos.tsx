@@ -38,7 +38,7 @@ const useModal = () => {
     buttonEnabled,
     handleScroll,
     modalRef,
-    setTermsAccepted
+    setTermsAccepted,
   };
 };
 

@@ -8,15 +8,19 @@ interface TermsCheckboxProps {
   label?: string;
 }
 
-export const TermsCheckbox: React.FC<TermsCheckboxProps> = ({ onOpenModal, checked, onChange, label, ...props }) => {
-
+export const TermsCheckbox: React.FC<TermsCheckboxProps> = ({
+  onOpenModal,
+  checked,
+  onChange,
+  label,
+  ...props
+}) => {
   const handleCheckboxChange = () => {
     if (!checked) {
-      onOpenModal(); 
+      onOpenModal();
     }
     onChange(false);
   };
-
 
   return (
     <div className="mb-5">

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Table, TextInput } from "flowbite-react";
+import { Table, TextInput } from 'flowbite-react';
 import { HiSearch } from 'react-icons/hi';
 import { CustomPagination } from '@components/molecules/pagination/pagination';
 
@@ -22,7 +22,7 @@ export const TableComponent: React.FC<TableComponentProps> = ({
   data,
   showSearch = false,
   itemsPerPage = 5,
-  title
+  title,
 }) => {
   const [searchTerm, setSearchTerm] = React.useState('');
   const [currentPage, setCurrentPage] = React.useState(1);
@@ -30,14 +30,14 @@ export const TableComponent: React.FC<TableComponentProps> = ({
   // Filtrar datos basados en el término de búsqueda
   const filteredData = React.useMemo(() => {
     if (!searchTerm.trim()) return data;
-    
-    return data.filter(item =>
-      columns.some(column => {
+
+    return data.filter((item) =>
+      columns.some((column) => {
         const value = (item as Record<string, unknown>)[column.relation];
-        return value != null && 
-          String(value)
-            .toLowerCase()
-            .includes(searchTerm.toLowerCase().trim());
+        return (
+          value != null &&
+          String(value).toLowerCase().includes(searchTerm.toLowerCase().trim())
+        );
       })
     );
   }, [data, searchTerm, columns]);
@@ -55,11 +55,11 @@ export const TableComponent: React.FC<TableComponentProps> = ({
   return (
     <div className="w-full">
       {/* Header con título y búsqueda */}
-      <div className="flex justify-between items-center mb-4">
+      <div className="mb-4 flex items-center justify-between">
         {title && <h2 className="text-xl font-bold">{title}</h2>}
       </div>
 
-      <div className='flex mb-4'>
+      <div className="mb-4 flex">
         {showSearch && (
           <div className="w-1/2">
             <TextInput
@@ -72,7 +72,7 @@ export const TableComponent: React.FC<TableComponentProps> = ({
         )}
 
         {totalPages > 1 && (
-          <div className='w-full flex justify-end'>
+          <div className="flex w-full justify-end">
             <CustomPagination
               currentPage={currentPage}
               totalPages={totalPages}
@@ -87,28 +87,31 @@ export const TableComponent: React.FC<TableComponentProps> = ({
         <Table striped>
           <Table.Head>
             {columns.map((column, index) => (
-              <Table.HeadCell key={index}>
-                {column.header}
-              </Table.HeadCell>
+              <Table.HeadCell key={index}>{column.header}</Table.HeadCell>
             ))}
           </Table.Head>
-          <hr/>
-          
+          <hr />
+
           <Table.Body className="divide-y">
             {paginatedData.map((row, rowIndex) => (
-              <Table.Row 
-                key={rowIndex} 
-                className="bg-white dark:border-gray-700 dark:bg-gray-800">
+              <Table.Row
+                key={rowIndex}
+                className="bg-white dark:border-gray-700 dark:bg-gray-800"
+              >
                 {columns.map((column, colIndex) => {
-                  const cellValue = (row as Record<string, unknown>)[column.relation];
+                  const cellValue = (row as Record<string, unknown>)[
+                    column.relation
+                  ];
                   return (
-                    <Table.Cell 
+                    <Table.Cell
                       key={colIndex}
                       className="whitespace-nowrap font-medium text-gray-900 dark:text-white"
                     >
-                      {column.cell 
+                      {column.cell
                         ? column.cell(row)
-                        : cellValue != null ? String(cellValue) : ''}
+                        : cellValue != null
+                          ? String(cellValue)
+                          : ''}
                     </Table.Cell>
                   );
                 })}

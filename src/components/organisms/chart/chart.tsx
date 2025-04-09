@@ -31,7 +31,7 @@ export const MyDoughnutChart = () => {
         position: 'right' as const,
       },
       tooltip: {
-        enabled: true
+        enabled: true,
       },
       doughnutLabel: {
         labels: [
@@ -39,43 +39,46 @@ export const MyDoughnutChart = () => {
             text: 'Total',
             font: {
               size: '16',
-              weight: 'bold'
-            }
+              weight: 'bold',
+            },
           },
           {
             text: `${data.datasets[0].data.reduce((a, b) => a + b, 0).toFixed(1)}`,
             font: {
-              size: '20'
-            }
-          }
-        ]
-      }
+              size: '20',
+            },
+          },
+        ],
+      },
     },
   };
 
   const textCenter = {
     id: 'textCenter',
     beforeDraw(chart: Chart) {
-      const { ctx, chartArea: { top, width, height } } = chart;
+      const {
+        ctx,
+        chartArea: { top, width, height },
+      } = chart;
       const text = 'Total';
       const total = data.datasets[0].data.reduce((a, b) => a + b, 0).toFixed(1);
 
       const centerY = top + height * 0.75;
-      
+
       ctx.save();
       ctx.font = '16px Arial';
       ctx.fillStyle = 'black';
       ctx.textAlign = 'center';
       ctx.fillText(text, width / 2, centerY - 15);
-      
+
       ctx.font = 'bold 20px Arial';
       ctx.fillText(total, width / 2, centerY + 15);
       ctx.restore();
-    }
+    },
   };
 
   return (
-    <div className='size-full min-h-[200px]'>
+    <div className="size-full min-h-[200px]">
       <Doughnut data={data} options={options} plugins={[textCenter]} />
     </div>
   );

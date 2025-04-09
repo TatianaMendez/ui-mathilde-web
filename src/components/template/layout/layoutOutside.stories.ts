@@ -9,5 +9,4 @@ const meta: Meta<typeof LayoutOutside> = {
 export default meta;
 type Story = StoryObj<typeof LayoutOutside>;
 
-export const Primary: Story = {
-};
+export const Primary: Story = {};
