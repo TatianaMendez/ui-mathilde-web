@@ -2,19 +2,31 @@ import * as React from 'react';
 import { Table, TextInput } from 'flowbite-react';
 import { HiSearch } from 'react-icons/hi';
 import { CustomPagination } from '@components/molecules/pagination/pagination';
+import Toggle from '@components/molecules/toggle/toggle';
 
 export interface Column {
   header: string;
   relation: string;
   cell?: (row: Record<string, unknown>) => React.ReactNode;
+  isToggle?: boolean;
+}
+
+interface TableData extends Record<string, unknown> {
+  [key: string]: unknown;
 }
 
 export interface TableComponentProps {
   columns: Column[];
-  data: Record<string, unknown>[];
+  data: TableData[];
   showSearch?: boolean;
   itemsPerPage?: number;
   title?: string;
+  onToggleChange?: (rowData: {
+    rowIndex: number;
+    checked: boolean;
+    row: TableData;
+    columnKey: string;
+  }) => void;
 }
 
 export const TableComponent: React.FC<TableComponentProps> = ({
@@ -23,6 +35,7 @@ export const TableComponent: React.FC<TableComponentProps> = ({
   showSearch = false,
   itemsPerPage = 5,
   title,
+  onToggleChange,
 }) => {
   const [searchTerm, setSearchTerm] = React.useState('');
   const [currentPage, setCurrentPage] = React.useState(1);
@@ -51,6 +64,33 @@ export const TableComponent: React.FC<TableComponentProps> = ({
 
   // Calcular total de páginas
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+
+  const renderCell = (column: Column, row: TableData, rowIndex: number) => {
+    const cellValue = row[column.relation];
+
+    if (column.isToggle) {
+      return (
+        <Toggle
+          checked={Boolean(cellValue)}
+          onChange={(checked) => 
+            onToggleChange?.({
+              rowIndex,
+              checked,
+              row,
+              columnKey: column.relation
+            })
+          }
+          disabled={false}
+        />
+      );
+    }
+
+    if (column.cell) {
+      return column.cell(row);
+    }
+
+    return cellValue != null ? String(cellValue) : '';
+  };
 
   return (
     <div className="w-full">
@@ -98,23 +138,14 @@ export const TableComponent: React.FC<TableComponentProps> = ({
                 key={rowIndex}
                 className="bg-white dark:border-gray-700 dark:bg-gray-800"
               >
-                {columns.map((column, colIndex) => {
-                  const cellValue = (row as Record<string, unknown>)[
-                    column.relation
-                  ];
-                  return (
-                    <Table.Cell
-                      key={colIndex}
-                      className="whitespace-nowrap font-medium text-gray-900 dark:text-white"
-                    >
-                      {column.cell
-                        ? column.cell(row)
-                        : cellValue != null
-                          ? String(cellValue)
-                          : ''}
-                    </Table.Cell>
-                  );
-                })}
+                {columns.map((column, colIndex) => (
+                  <Table.Cell
+                    key={colIndex}
+                    className="whitespace-nowrap font-medium text-gray-900 dark:text-white"
+                  >
+                    {renderCell(column, row, rowIndex)}
+                  </Table.Cell>
+                ))}
               </Table.Row>
             ))}
           </Table.Body>

@@ -15,7 +15,6 @@ import { IoSettingsSharp } from 'react-icons/io5';
 import { Link } from 'react-router-dom';
 import { IoIosExit } from 'react-icons/io';
 
-
 export const SidebarMth = () => {
   const [collapsed, setCollapsed] = useState(true);
   const [activeModal, setActiveModal] = useState<string | null>(null);
@@ -61,7 +60,7 @@ export const SidebarMth = () => {
             <div>
               <ImageFormat
                 classIm="mx-auto"
-                src={`../../../../public/assets/images/logo mathilde.png`}
+                src="https://ftp.mathilde-ads.com/151-5f18f5b0ce0f79b3c7e3ffbd4828ec14.png"
                 alt="Logo Mathilde ads"
                 width={74}
                 height={74}

@@ -20,3 +20,5 @@ export { CardFormat } from './components/organisms/card/cardFormat';
 export { TableOfContents } from './components/organisms/table/tableOfContens/tableOfContens';
 export { Dropzone } from './components/organisms/dropzone/dropzone';
 export { ListFile } from './components/organisms/dropzone/listFile';
+export { Spinner } from './components/molecules/spinner/spinner';
+export { TabsComponent } from './components/molecules/tabs/tabs';

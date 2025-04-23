@@ -1,21 +1,43 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { TableComponent } from './table';
-import { type Column } from './table.types';
+import type { Column } from './table';
+import { action } from '@storybook/addon-actions';
 
 const meta = {
   title: 'Organisms/Table',
   component: TableComponent,
   parameters: {
     layout: 'centered',
+    actions: {
+      handles: ['onToggleChange']
+    }
   },
   tags: ['autodocs'],
+  argTypes: {
+    showSearch: {
+      control: 'boolean',
+      description: 'Mostrar barra de búsqueda'
+    },
+    itemsPerPage: {
+      control: 'number',
+      description: 'Items por página'
+    },
+    title: {
+      control: 'text',
+      description: 'Título de la tabla'
+    },
+    onToggleChange: {
+      description: 'Callback cuando cambia un toggle',
+      action: 'toggle changed'
+    }
+  }
 } satisfies Meta<typeof TableComponent>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-// Datos de ejemplo
-const sampleData: Record<string, unknown>[] = [
+// Datos de ejemplo básicos
+const sampleData = [
   {
     productName: 'Apple MacBook Pro 17"',
     color: 'Silver',
@@ -31,24 +53,12 @@ const sampleData: Record<string, unknown>[] = [
   {
     productName: 'Magic Mouse 2',
     color: 'Black',
-    category: 'relationies',
+    category: 'Accessories',
     price: 99,
-  },
-  {
-    productName: 'Google Pixel Phone',
-    color: 'Gray',
-    category: 'Phone',
-    price: 799,
-  },
-  {
-    productName: 'Apple Watch 5',
-    color: 'Red',
-    category: 'Wearables',
-    price: 999,
-  },
+  }
 ];
 
-// Columnas de ejemplo
+// Columnas básicas
 const sampleColumns: Column[] = [
   {
     header: 'Producto',
@@ -65,8 +75,7 @@ const sampleColumns: Column[] = [
   {
     header: 'Precio',
     relation: 'price',
-    cell: (row: Record<string, unknown>) =>
-      `$${(row.price as number).toLocaleString()}`,
+    cell: (row) => `$${(row.price as number).toLocaleString()}`,
   },
 ];
 
@@ -80,81 +89,116 @@ export const Basic: Story = {
   },
 };
 
-// Historia con búsqueda
-export const WithSearch: Story = {
+// Datos de usuarios con toggle
+const userData = [
+  {
+    id: 1,
+    status: true,
+    name: 'Juan Pérez',
+    email: 'juan@ejemplo.com',
+    role: 'Admin'
+  },
+  {
+    id: 2,
+    status: false,
+    name: 'María García',
+    email: 'maria@ejemplo.com',
+    role: 'Editor'
+  }
+];
+
+// Columnas con un toggle
+const columnsWithToggle: Column[] = [
+  {
+    header: 'Estado',
+    relation: 'status',
+    isToggle: true
+  },
+  {
+    header: 'Nombre',
+    relation: 'name'
+  },
+  {
+    header: 'Email',
+    relation: 'email'
+  },
+  {
+    header: 'Rol',
+    relation: 'role',
+    cell: (row) => (
+      <span className={`px-2 py-1 rounded-full text-xs font-semibold 
+        ${row.role === 'Admin' ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-800'}`}>
+        {row.role as string}
+      </span>
+    )
+  }
+];
+
+// Historia con toggle
+export const TableWithToggle: Story = {
   args: {
-    ...Basic.args,
+    columns: columnsWithToggle,
+    data: userData,
     showSearch: true,
-    title: 'Tabla con búsqueda',
-  },
+    title: 'Usuarios con Toggle',
+    onToggleChange: action('toggle changed in user table')
+  }
 };
 
-// Historia con paginación personalizada
-export const CustomPagination: Story = {
-  args: {
-    ...Basic.args,
-    itemsPerPage: 2,
-    title: 'Tabla con paginación personalizada',
+// Datos de tareas con múltiples toggles
+const taskData = [
+  {
+    id: 1,
+    name: 'Diseño de UI',
+    isActive: true,
+    isUrgent: false,
+    isCompleted: true,
+    assignedTo: 'Ana'
   },
-};
+  {
+    id: 2,
+    name: 'Desarrollo Backend',
+    isActive: true,
+    isUrgent: true,
+    isCompleted: false,
+    assignedTo: 'Carlos'
+  }
+];
 
-// Historia con muchos datos
-export const ManyRows: Story = {
+// Columnas con múltiples toggles
+const multipleTogglesColumns: Column[] = [
+  {
+    header: 'Tarea',
+    relation: 'name'
+  },
+  {
+    header: 'Activo',
+    relation: 'isActive',
+    isToggle: true
+  },
+  {
+    header: 'Urgente',
+    relation: 'isUrgent',
+    isToggle: true
+  },
+  {
+    header: 'Completado',
+    relation: 'isCompleted',
+    isToggle: true
+  },
+  {
+    header: 'Asignado a',
+    relation: 'assignedTo'
+  }
+];
+
+// Historia con múltiples toggles
+export const TableWithMultipleToggles: Story = {
   args: {
-    ...Basic.args,
-    data: Array(20)
-      .fill(null)
-      .map((_, index) => ({
-        productName: `Producto ${index + 1}`,
-        color: ['Red', 'Blue', 'Green', 'Yellow'][index % 4],
-        category: ['Electronics', 'Clothing', 'Books', 'Sports'][index % 4],
-        price: Math.floor(Math.random() * 1000) + 100,
-      })) as Record<string, unknown>[],
-    title: 'Tabla con muchos registros',
+    columns: multipleTogglesColumns,
+    data: taskData,
     showSearch: true,
-  },
-};
-
-// Historia con columnas personalizadas
-export const CustomColumns: Story = {
-  args: {
-    columns: [
-      {
-        header: 'Producto',
-        relation: 'productName',
-        cell: (row: Record<string, unknown>) => (
-          <div className="flex items-center">
-            <span className="mr-2 h-2 w-2 rounded-full bg-green-500"></span>
-            {row.productName as string}
-          </div>
-        ),
-      },
-      {
-        header: 'Precio',
-        relation: 'price',
-        cell: (row: Record<string, unknown>) => (
-          <span className="font-bold text-green-600">
-            ${(row.price as number).toLocaleString()}
-          </span>
-        ),
-      },
-    ],
-    data: sampleData,
-    title: 'Tabla con columnas personalizadas',
-    showSearch: true,
-  },
-};
-
-// Historia con tema oscuro
-export const DarkTheme: Story = {
-  args: {
-    ...Basic.args,
-    title: 'Tabla con tema oscuro',
-  },
-  parameters: {
-    backgrounds: {
-      default: 'dark',
-    },
-    theme: 'dark',
-  },
+    title: 'Tareas con Múltiples Toggles',
+    onToggleChange: action('toggle changed in tasks table')
+  }
 };

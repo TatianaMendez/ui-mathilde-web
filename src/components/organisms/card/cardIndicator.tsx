@@ -2,9 +2,20 @@
 import ImageFormat from '@/components/atoms/image/imageFormat';
 import type { CardIndicatorProps } from './card.types';
 import ProgressBar from '@components/molecules/progressBar/progressBar';
-import { getBaseUrl } from '@utils/getBaseUrl';
 
-const imagesPath = getBaseUrl();
+// Mapeo de nombres de imágenes a sus importaciones
+const imageMap: Record<string, string> = {
+  conversiones:
+    'https://ftp.mathilde-ads.com/151-a05ae956a2c7caeb6f6d8952cac41a24.svg',
+  click:
+    'https://ftp.mathilde-ads.com/151-81ace0b5242dabee10930b76df01d43b.svg',
+  impresiones:
+    'https://ftp.mathilde-ads.com/151-b50587f350bafb8f19a9308325b45467.svg',
+  porcentaje:
+    'https://ftp.mathilde-ads.com/151-846076c2407128d25fffa4f35342d415.svg',
+  vistas:
+    'https://ftp.mathilde-ads.com/151-2b68ef020e57a0986c576b16607d85dd.svg',
+};
 
 export const CardIndicator: React.FC<CardIndicatorProps> = ({
   logo,
@@ -25,7 +36,7 @@ export const CardIndicator: React.FC<CardIndicatorProps> = ({
     <div className="flex flex-col border bg-white px-3.5 py-7">
       <div className="flex justify-end">
         <ImageFormat
-          src={`${imagesPath}/public/assets/images/${logo}.svg`}
+          src={imageMap[logo] || ''}
           alt="Icon"
           width={30}
           height={30}
