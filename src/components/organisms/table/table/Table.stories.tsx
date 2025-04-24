@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { TableComponent } from './table';
 import type { Column } from './table';
 import { action } from '@storybook/addon-actions';
+import { useState } from 'react';
 
 const meta = {
   title: 'Organisms/Table',
@@ -39,18 +40,21 @@ type Story = StoryObj<typeof meta>;
 // Datos de ejemplo básicos
 const sampleData = [
   {
+    id: 'p1',
     productName: 'Apple MacBook Pro 17"',
     color: 'Silver',
     category: 'Laptop',
     price: 2999,
   },
   {
+    id: 'p2',
     productName: 'Microsoft Surface Pro',
     color: 'White',
     category: 'Laptop PC',
     price: 1999,
   },
   {
+    id: 'p3',
     productName: 'Magic Mouse 2',
     color: 'Black',
     category: 'Accessories',
@@ -148,7 +152,7 @@ export const TableWithToggle: Story = {
 // Datos de tareas con múltiples toggles
 const taskData = [
   {
-    id: 1,
+    id: 't1',
     name: 'Diseño de UI',
     isActive: true,
     isUrgent: false,
@@ -156,7 +160,7 @@ const taskData = [
     assignedTo: 'Ana'
   },
   {
-    id: 2,
+    id: 't2',
     name: 'Desarrollo Backend',
     isActive: true,
     isUrgent: true,
@@ -200,5 +204,71 @@ export const TableWithMultipleToggles: Story = {
     showSearch: true,
     title: 'Tareas con Múltiples Toggles',
     onToggleChange: action('toggle changed in tasks table')
+  }
+};
+
+// Datos de ejemplo con más usuarios para demostrar paginación
+const paginatedUserData = Array(15).fill(null).map((_, index) => ({
+  id: `user-${index + 1}`,
+  status: index % 2 === 0,
+  name: `Usuario ${index + 1}`,
+  email: `usuario${index + 1}@ejemplo.com`,
+  role: index % 3 === 0 ? 'Admin' : 'Editor'
+}));
+
+// Componente con estado para mantener los valores de los toggles
+const TableWithState = () => {
+  const [data, setData] = useState(paginatedUserData);
+
+  const handleToggleChange = ({ 
+    rowId, 
+    checked, 
+    columnKey 
+  }: { 
+    rowId: string | number;
+    checked: boolean;
+    columnKey: string;
+  }) => {
+    setData(prevData => 
+      prevData.map(item => 
+        item.id === rowId 
+          ? { ...item, [columnKey]: checked }
+          : item
+      )
+    );
+    action('toggle changed in paginated table')({ rowId, checked, columnKey });
+  };
+
+  return (
+    <TableComponent
+      columns={columnsWithToggle}
+      data={data}
+      showSearch={true}
+      itemsPerPage={5}
+      title="Usuarios con Toggles Persistentes"
+      onToggleChange={handleToggleChange}
+    />
+  );
+};
+
+// Historia con paginación y estado persistente
+export const TableWithPersistentToggles: Story = {
+  args: {
+    columns: columnsWithToggle,
+    data: paginatedUserData,
+    showSearch: true,
+    itemsPerPage: 5,
+    title: "Usuarios con Toggles Persistentes",
+    onToggleChange: action('toggle changed in paginated table')
+  },
+  render: () => <TableWithState />,
+  parameters: {
+    docs: {
+      description: {
+        story: 'Esta historia demuestra cómo los toggles mantienen su estado al cambiar de página. ' +
+               'Puedes cambiar el estado de los toggles en cualquier página y al volver, ' +
+               'el estado se mantendrá correctamente.'
+      }
+    }
   }
 };

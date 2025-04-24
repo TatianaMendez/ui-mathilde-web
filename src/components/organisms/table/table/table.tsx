@@ -12,6 +12,7 @@ export interface Column {
 }
 
 interface TableData extends Record<string, unknown> {
+  id: string | number;
   [key: string]: unknown;
 }
 
@@ -22,7 +23,7 @@ export interface TableComponentProps {
   itemsPerPage?: number;
   title?: string;
   onToggleChange?: (rowData: {
-    rowIndex: number;
+    rowId: string | number;
     checked: boolean;
     row: TableData;
     columnKey: string;
@@ -65,7 +66,7 @@ export const TableComponent: React.FC<TableComponentProps> = ({
   // Calcular total de páginas
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
-  const renderCell = (column: Column, row: TableData, rowIndex: number) => {
+  const renderCell = (column: Column, row: TableData) => {
     const cellValue = row[column.relation];
 
     if (column.isToggle) {
@@ -74,7 +75,7 @@ export const TableComponent: React.FC<TableComponentProps> = ({
           checked={Boolean(cellValue)}
           onChange={(checked) => 
             onToggleChange?.({
-              rowIndex,
+              rowId: row.id,
               checked,
               row,
               columnKey: column.relation
@@ -133,17 +134,17 @@ export const TableComponent: React.FC<TableComponentProps> = ({
           <hr />
 
           <Table.Body className="divide-y">
-            {paginatedData.map((row, rowIndex) => (
+            {paginatedData.map((row) => (
               <Table.Row
-                key={rowIndex}
+                key={row.id}
                 className="bg-white dark:border-gray-700 dark:bg-gray-800"
               >
                 {columns.map((column, colIndex) => (
                   <Table.Cell
-                    key={colIndex}
+                    key={`${row.id}-${colIndex}`}
                     className="whitespace-nowrap font-medium text-gray-900 dark:text-white"
                   >
-                    {renderCell(column, row, rowIndex)}
+                    {renderCell(column, row)}
                   </Table.Cell>
                 ))}
               </Table.Row>
