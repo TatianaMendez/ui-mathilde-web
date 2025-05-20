@@ -1,17 +1,17 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { CardFormat } from './cardFormat';
+import { Card } from './card';
 import { HiHome } from 'react-icons/hi';
 import { FaReact } from 'react-icons/fa';
 import { MdFavorite } from 'react-icons/md';
 
 const meta = {
-  title: 'Organisms/CardFormat',
-  component: CardFormat,
+  title: 'Organisms/Card',
+  component: Card,
   parameters: {
     layout: 'centered',
   },
   tags: ['autodocs'],
-} satisfies Meta<typeof CardFormat>;
+} satisfies Meta<typeof Card>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -19,10 +19,7 @@ type Story = StoryObj<typeof meta>;
 // Historia con imagen
 export const WithImage: Story = {
   args: {
-    image: {
-      type: 'image',
-      name: 'click',
-    },
+    imageUrl: 'https://ftp.mathilde-ads.com/151-d41c45a31a82b5e2519657b41a04ae94.svg',
     title: 'Card con Imagen',
     description: 'Esta es una card que muestra una imagen SVG',
   },

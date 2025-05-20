@@ -6,7 +6,7 @@ export const LayoutOutside = () => {
     <div className="mt-32">
       <ImageFormat
         classIm="mx-auto"
-        src={`../../../../public/assets/images/mathilde.png`}
+        src="https://ftp.mathilde-ads.com/151-41415c0c026df82dbb391c09db474cfa.png"
         alt="Logo Mathilde ads"
         width={400}
         height={250}
@@ -14,7 +14,7 @@ export const LayoutOutside = () => {
       <div className={style['m-image-container']}>
         <ImageFormat
           classIm={style['m-image']}
-          src={`../../../../public/assets/images/background-mathilde.png`}
+          src="https://ftp.mathilde-ads.com/151-3f28d319ba5adbe318c58ef38b858e50.png"
           alt="Logo Mathilde ads"
           width={400}
           height={300}

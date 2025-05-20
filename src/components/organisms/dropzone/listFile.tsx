@@ -1,7 +1,6 @@
 import ImageFormat from '@components/atoms/image/imageFormat';
 import React from 'react';
 import { ImBin } from 'react-icons/im';
-
 export interface ListFileProps {
   files: File[];
   onDelete: (fileToDelete: File) => void;
@@ -18,14 +17,14 @@ export const ListFile: React.FC<ListFileProps> = ({ files, onDelete }) => {
     <div className="mt-4">
       <ul className="list-disc">
         {files.map((file, index) => (
-          <div 
-            key={index} 
+          <div
+            key={index}
             className="mb-5 flex w-full items-center justify-between rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 p-4 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:border-gray-500 dark:hover:bg-gray-600"
           >
             <div className="flex items-center">
               <ImageFormat
                 classIm="mr-3"
-                src={`../../../../public/assets/images/fileSVG.svg`}
+                src="https://ftp.mathilde-ads.com/151-1dcc25481e8c72ed21c720c94adfdec6.svg"
                 alt="icon dropzone"
                 width={50}
               />
@@ -35,8 +34,8 @@ export const ListFile: React.FC<ListFileProps> = ({ files, onDelete }) => {
             </div>
             <div className="mx-4 flex items-center">
               <span className="flex text-sm">{formatFileSize(file.size)}</span>
-              <ImBin 
-                className="ml-2 text-4xl text-gray-400 cursor-pointer" 
+              <ImBin
+                className="ml-2 cursor-pointer text-4xl text-gray-400"
                 onClick={() => onDelete(file)}
               />
             </div>

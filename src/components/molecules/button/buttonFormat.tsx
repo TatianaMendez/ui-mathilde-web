@@ -11,9 +11,9 @@ export interface ButtonFormatProps {
   className?: string;
   type: string;
   onClick?: () => void;
-  leftIcon?: IconType; 
-  rightIcon?: IconType; 
-  iconSize?: number; 
+  leftIcon?: IconType;
+  rightIcon?: IconType;
+  iconSize?: number;
 }
 
 export const ButtonFormat: React.FC<ButtonFormatProps> = ({

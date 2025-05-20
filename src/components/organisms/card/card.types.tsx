@@ -1,8 +1,5 @@
 export interface CardProps {
-  image?: {
-    type: 'image' | 'icon';
-    name: string;
-  };
+  imageUrl?: string;
   title: string;
   description: string;
   icon?: React.ComponentType<{ size?: number }>; // Nuevo prop para el icono

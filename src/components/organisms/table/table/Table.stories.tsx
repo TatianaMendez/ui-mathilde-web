@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { TableComponent } from './table';
-import { type Column } from './table.types';
+import { TableComponent, Column } from './table';
+import { action } from '@storybook/addon-actions';
 
 const meta = {
   title: 'Organisms/Table',
@@ -9,152 +9,149 @@ const meta = {
     layout: 'centered',
   },
   tags: ['autodocs'],
+  argTypes: {
+    showSearch: {
+      control: 'boolean',
+      description: 'Mostrar barra de búsqueda',
+    },
+    itemsPerPage: {
+      control: 'number',
+      description: 'Número de elementos por página',
+    },
+    title: {
+      control: 'text',
+      description: 'Título de la tabla',
+    },
+  },
 } satisfies Meta<typeof TableComponent>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
 // Datos de ejemplo
-const sampleData: Record<string, unknown>[] = [
-  {
-    productName: 'Apple MacBook Pro 17"',
-    color: 'Silver',
-    category: 'Laptop',
-    price: 2999,
-  },
-  {
-    productName: 'Microsoft Surface Pro',
-    color: 'White',
-    category: 'Laptop PC',
-    price: 1999,
-  },
-  {
-    productName: 'Magic Mouse 2',
-    color: 'Black',
-    category: 'relationies',
-    price: 99,
-  },
-  {
-    productName: 'Google Pixel Phone',
-    color: 'Gray',
-    category: 'Phone',
-    price: 799,
-  },
-  {
-    productName: 'Apple Watch 5',
-    color: 'Red',
-    category: 'Wearables',
-    price: 999,
-  },
+const sampleData = [
+  { id: 1, name: 'Producto 1', status: true, price: 100 },
+  { id: 2, name: 'Producto 2', status: false, price: 200 },
+  { id: 3, name: 'Producto 3', status: true, price: 300 },
+  { id: 4, name: 'Producto 4', status: false, price: 400 },
+  { id: 5, name: 'Producto 5', status: true, price: 500 },
 ];
 
-// Columnas de ejemplo
-const sampleColumns: Column[] = [
+// Columnas con toggle y texto
+const columnsWithToggle: Column[] = [
   {
-    header: 'Producto',
-    relation: 'productName',
+    header: 'Nombre',
+    relation: 'name',
+    sortable: true,
   },
   {
-    header: 'Color',
-    relation: 'color',
-  },
-  {
-    header: 'Categoría',
-    relation: 'category',
+    header: 'Estado',
+    relation: 'status',
+    isToggle: true,
+    toggleText: {
+      active: 'Activo',
+      inactive: 'Inactivo',
+    },
   },
   {
     header: 'Precio',
     relation: 'price',
-    cell: (row: Record<string, unknown>) =>
-      `$${(row.price as number).toLocaleString()}`,
+    sortable: true,
   },
 ];
 
-// Historia básica
-export const Basic: Story = {
+// Columnas con toggle sin texto
+const columnsWithoutToggleText: Column[] = [
+  {
+    header: 'Nombre',
+    relation: 'name',
+    sortable: true,
+  },
+  {
+    header: 'Estado',
+    relation: 'status',
+    isToggle: true,
+  },
+  {
+    header: 'Precio',
+    relation: 'price',
+    sortable: true,
+  },
+];
+
+// Historia con toggle y texto
+export const WithToggleAndText: Story = {
   args: {
-    columns: sampleColumns,
+    columns: columnsWithToggle,
     data: sampleData,
-    showSearch: false,
+    showSearch: true,
     itemsPerPage: 5,
+    title: 'Productos',
+    onToggleChange: action('toggle-changed'),
   },
 };
 
-// Historia con búsqueda
-export const WithSearch: Story = {
+// Historia con toggle sin texto
+export const WithToggleWithoutText: Story = {
   args: {
-    ...Basic.args,
+    columns: columnsWithoutToggleText,
+    data: sampleData,
     showSearch: true,
-    title: 'Tabla con búsqueda',
+    itemsPerPage: 5,
+    title: 'Productos',
+    onToggleChange: action('toggle-changed'),
   },
 };
 
-// Historia con paginación personalizada
-export const CustomPagination: Story = {
-  args: {
-    ...Basic.args,
-    itemsPerPage: 2,
-    title: 'Tabla con paginación personalizada',
-  },
-};
-
-// Historia con muchos datos
-export const ManyRows: Story = {
-  args: {
-    ...Basic.args,
-    data: Array(20)
-      .fill(null)
-      .map((_, index) => ({
-        productName: `Producto ${index + 1}`,
-        color: ['Red', 'Blue', 'Green', 'Yellow'][index % 4],
-        category: ['Electronics', 'Clothing', 'Books', 'Sports'][index % 4],
-        price: Math.floor(Math.random() * 1000) + 100,
-      })) as Record<string, unknown>[],
-    title: 'Tabla con muchos registros',
-    showSearch: true,
-  },
-};
-
-// Historia con columnas personalizadas
-export const CustomColumns: Story = {
+// Historia con múltiples toggles
+export const WithMultipleToggles: Story = {
   args: {
     columns: [
       {
-        header: 'Producto',
-        relation: 'productName',
-        cell: (row: Record<string, unknown>) => (
-          <div className="flex items-center">
-            <span className="mr-2 h-2 w-2 rounded-full bg-green-500"></span>
-            {row.productName as string}
-          </div>
-        ),
+        header: 'Nombre',
+        relation: 'name',
+        sortable: true,
+      },
+      {
+        header: 'Estado',
+        relation: 'status',
+        isToggle: true,
+        toggleText: {
+          active: 'Activo',
+          inactive: 'Inactivo',
+        },
+      },
+      {
+        header: 'Disponible',
+        relation: 'available',
+        isToggle: true,
+        toggleText: {
+          active: 'En Stock',
+          inactive: 'Sin Stock',
+        },
       },
       {
         header: 'Precio',
         relation: 'price',
-        cell: (row: Record<string, unknown>) => (
-          <span className="font-bold text-green-600">
-            ${(row.price as number).toLocaleString()}
-          </span>
-        ),
+        sortable: true,
       },
     ],
-    data: sampleData,
-    title: 'Tabla con columnas personalizadas',
+    data: [
+      { id: 1, name: 'Producto 1', status: true, available: false, price: 100 },
+      { id: 2, name: 'Producto 2', status: false, available: true, price: 200 },
+      { id: 3, name: 'Producto 3', status: true, available: true, price: 300 },
+      {
+        id: 4,
+        name: 'Producto 4',
+        status: false,
+        available: false,
+        price: 400,
+      },
+      { id: 5, name: 'Producto 5', status: true, available: true, price: 500 },
+    ],
     showSearch: true,
-  },
-};
-
-// Historia con tema oscuro
-export const DarkTheme: Story = {
-  args: {
-    ...Basic.args,
-    title: 'Tabla con tema oscuro',
-  },
-  parameters: {
-    backgrounds: {
-      default: 'dark',
-    },
-    theme: 'dark',
+    itemsPerPage: 5,
+    title: 'Productos',
+    onToggleChange: action('toggle-changed'),
   },
 };

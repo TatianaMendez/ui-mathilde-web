@@ -36,3 +36,35 @@ input[type=number] {
     -moz-appearance: textfield;
     appearance: textfield;
 }
+
+/* Datepicker */
+
+.custom-datepicker .hover\:bg-cyan-600:hover,
+.custom-datepicker button.bg-cyan-700:focus,
+.custom-datepicker button.bg-cyan-700:hover{
+  background-color: #563cfebe !important;
+  color: #fff !important;
+}
+/* Día seleccionado y botones principales del Datepicker */
+.custom-datepicker .bg-cyan-700,
+.custom-datepicker .hover\:bg-cyan-700:hover,
+.custom-datepicker .bg-cyan-600,
+.custom-datepicker .text-cyan-600,
+.custom-datepicker .active\:bg-cyan-700:active {
+  background-color: #563CFE !important;
+  color: #fff !important;
+  border-color: #563CFE !important;
+}
+
+
+/* Botón 'Today' */
+.custom-datepicker button.bg-cyan-700,
+.custom-datepicker button.bg-cyan-600 {
+  background-color: #563CFE !important;
+  color: #fff !important;
+  border-color: #563CFE !important;
+}
+
+.custom-datepicker button:disabled {
+  background-color: #e8e4ef;
+}

@@ -1,26 +1,58 @@
 import { Sidebar, Menu, MenuItem, sidebarClasses } from 'react-pro-sidebar';
 import { useState } from 'react';
-import ModalFormat from '@components/organisms/modal/modalFormat';
-import ImageFormat from '@components/atoms/image/imageFormat';
-import CardFormat from '@components/organisms/card/cardFormat';
-
-// Icons
-
-import { FaListAlt } from 'react-icons/fa';
-import { BsFillBoxSeamFill } from 'react-icons/bs';
-import { FaUsers } from 'react-icons/fa';
-import { AiFillPieChart } from 'react-icons/ai';
-import { BsFillFileTextFill } from 'react-icons/bs';
-import { IoSettingsSharp } from 'react-icons/io5';
-import { Link } from 'react-router-dom';
+import { Card } from '../card/card';
+import { ModalFormat } from '../modal/modalFormat';
+import { ImageFormat } from '../../atoms/image/imageFormat';
 import { IoIosExit } from 'react-icons/io';
 
+export interface MenuItem {
+  id: string;
+  label: string;
+  icon: React.ReactNode;
+  action?: () => void;
+  href?: string;
+  target?: '_blank' | '_self';
+}
 
-export const SidebarMth = () => {
-  const [collapsed, setCollapsed] = useState(true);
+export interface CardItem {
+  id: string;
+  title: string;
+  description: string;
+  imageUrl: string; // Solo URL externa
+  action?: () => void;
+  href?: string;
+  target?: '_blank' | '_self';
+}
+
+export interface SidebarProProps {
+  logo: {
+    src: string;
+    alt: string;
+    width: number;
+    height: number;
+  };
+  menuItems: MenuItem[];
+  campaignCards?: CardItem[];
+  onLogout?: () => void;
+  defaultCollapsed?: boolean;
+  backgroundColor?: string;
+  textColor?: string;
+  className?: string;
+}
+
+export const SidebarPro: React.FC<SidebarProProps> = ({
+  logo,
+  menuItems,
+  campaignCards = [],
+  onLogout,
+  defaultCollapsed = true,
+  backgroundColor = '#483FFF',
+  textColor = '#483FFF',
+  className = '',
+}) => {
+  const [collapsed, setCollapsed] = useState(defaultCollapsed);
   const [activeModal, setActiveModal] = useState<string | null>(null);
 
-  // Manejadores para el hover del sidebar
   const handleMouseEnter = () => {
     if (!activeModal) {
       setCollapsed(false);
@@ -33,13 +65,32 @@ export const SidebarMth = () => {
     }
   };
 
-  // Manejador para abrir/cerrar modales
-  const handleModalToggle = (modalName: string) => {
-    setActiveModal(activeModal === modalName ? null : modalName);
+  const handleItemClick = (item: MenuItem) => {
+    if (item.action) {
+      item.action();
+    } else if (item.href) {
+      if (item.target === '_blank') {
+        window.open(item.href, '_blank');
+      } else {
+        window.location.href = item.href;
+      }
+    }
+  };
+
+  const handleCardClick = (card: CardItem) => {
+    if (card.action) {
+      card.action();
+    } else if (card.href) {
+      if (card.target === '_blank') {
+        window.open(card.href, '_blank');
+      } else {
+        window.location.href = card.href;
+      }
+    }
   };
 
   return (
-    <div className="fixed left-0 top-0 z-40 h-full">
+    <div className={`fixed left-0 top-0 z-40 h-full ${className}`}>
       <div
         className="flex flex-col"
         onMouseEnter={handleMouseEnter}
@@ -49,227 +100,94 @@ export const SidebarMth = () => {
           collapsed={collapsed}
           rootStyles={{
             [`.${sidebarClasses.container}`]: {
-              backgroundColor: '#483FFF',
-              color: '#483FFF',
+              backgroundColor,
+              color: textColor,
               height: '100vh',
               display: 'flex',
               flexDirection: 'column',
             },
           }}
         >
-          <Link to="/dashboard">
-            <div>
+          <div className="mb-2 mt-5">
+            <a href="/">
               <ImageFormat
-                classIm="mx-auto"
-                src={`../../../../public/assets/images/logo mathilde.png`}
-                alt="Logo Mathilde ads"
-                width={74}
-                height={74}
+                classIm="mx-3"
+                src={logo.src}
+                alt={logo.alt}
+                width={logo.width}
+                height={logo.height}
               />
-            </div>
-          </Link>
-          <Menu>
-            <MenuItem
-              icon={<FaListAlt className="text-2xl" />}
-              onClick={() => handleModalToggle('campanas')}
-              className="mx-2 my-1 rounded-lg bg-white hover:bg-opacity-90"
-              rootStyles={{
-                button: {
-                  width: collapsed
-                    ? 'calc(100% - 0.5rem)'
-                    : 'calc(100% - 1rem)',
-                  margin: collapsed ? '0 0.25rem' : '0 0.5rem',
-                  color: '#483FFF',
-                  '&:hover': {
-                    color: '#483FFF',
-                  },
-                },
-              }}
-            >
-              {' '}
-              Campañas{' '}
-            </MenuItem>
-            <Link to="https://dsp.mathilde-ads.com/login">
-              <MenuItem
-                icon={<BsFillBoxSeamFill className="text-xl" />}
-                className="mx-2 my-1 rounded-lg bg-white hover:bg-opacity-90"
-                rootStyles={{
-                  button: {
-                    width: collapsed
-                      ? 'calc(100% - 0.5rem)'
-                      : 'calc(100% - 1rem)',
-                    margin: collapsed ? '0 0.25rem' : '0 0.5rem',
-                    color: '#483FFF',
-                    '&:hover': {
-                      color: '#483FFF',
-                    },
-                  },
-                }}
-              >
-                {' '}
-                Medios{' '}
-              </MenuItem>
-            </Link>
-            <MenuItem
-              icon={<FaUsers className="text-xl" />}
-              onClick={() => handleModalToggle('audiencias')}
-              className="mx-2 my-1 rounded-lg bg-white hover:bg-opacity-90"
-              rootStyles={{
-                button: {
-                  width: collapsed
-                    ? 'calc(100% - 0.5rem)'
-                    : 'calc(100% - 1rem)',
-                  margin: collapsed ? '0 0.25rem' : '0 0.5rem',
-                  color: '#483FFF',
-                  '&:hover': {
-                    color: '#483FFF',
-                  },
-                },
-              }}
-            >
-              {' '}
-              Audiencias{' '}
-            </MenuItem>
-            <MenuItem
-              icon={<AiFillPieChart className="text-xl" />}
-              onClick={() => handleModalToggle('reportes')}
-              className="mx-2 my-1 rounded-lg bg-white hover:bg-opacity-90"
-              rootStyles={{
-                button: {
-                  width: collapsed
-                    ? 'calc(100% - 0.5rem)'
-                    : 'calc(100% - 1rem)',
-                  margin: collapsed ? '0 0.25rem' : '0 0.5rem',
-                  color: '#483FFF',
-                  '&:hover': {
-                    color: '#483FFF',
-                  },
-                },
-              }}
-            >
-              {' '}
-              Reportes{' '}
-            </MenuItem>
-            <MenuItem
-              icon={<BsFillFileTextFill className="text-xl" />}
-              onClick={() => handleModalToggle('facturacion')}
-              className="mx-2 my-1 rounded-lg bg-white hover:bg-opacity-90"
-              rootStyles={{
-                button: {
-                  width: collapsed
-                    ? 'calc(100% - 0.5rem)'
-                    : 'calc(100% - 1rem)',
-                  margin: collapsed ? '0 0.25rem' : '0 0.5rem',
-                  color: '#483FFF',
-                  '&:hover': {
-                    color: '#483FFF',
-                  },
-                },
-              }}
-            >
-              {' '}
-              Facturación{' '}
-            </MenuItem>
-            <Link to="/settings">
-              <MenuItem
-                icon={<IoSettingsSharp className="text-xl" />}
-                className="mx-2 my-1 rounded-lg bg-white hover:bg-opacity-90"
-                rootStyles={{
-                  button: {
-                    width: collapsed
-                      ? 'calc(100% - 0.5rem)'
-                      : 'calc(100% - 1rem)',
-                    margin: collapsed ? '0 0.25rem' : '0 0.5rem',
-                    color: '#483FFF',
-                    '&:hover': {
-                      color: '#483FFF',
-                    },
-                  },
-                }}
-              >
-                {' '}
-                Configuración{' '}
-              </MenuItem>
-            </Link>
-          </Menu>
-
-          <div className="mt-auto self-end p-4">
-            <div className="flex justify-center rounded-lg bg-white p-2">
-              <button
-                className="cursor-pointer text-3xl"
-                style={{ color: '#483FFF' }}
-              >
-                <IoIosExit />
-              </button>
-            </div>
+            </a>
           </div>
+          <Menu>
+            {menuItems.map((item) => (
+              <MenuItem
+                key={item.id}
+                icon={item.icon}
+                onClick={() => handleItemClick(item)}
+                className="mx-3 my-1 mb-2 rounded-md bg-white hover:bg-opacity-90"
+                rootStyles={{
+                  button: {
+                    width: collapsed
+                      ? 'calc(100% - 0.5rem)'
+                      : 'calc(100% - 1rem)',
+                    margin: collapsed ? '0 0.25rem' : '0 0.5rem',
+                    color: textColor,
+                    '&:hover': {
+                      color: textColor,
+                    },
+                  },
+                }}
+              >
+                {item.label}
+              </MenuItem>
+            ))}
+          </Menu>
+          {onLogout && (
+            <div className="mt-auto w-full cursor-pointer self-end p-4">
+              <div
+                className="flex justify-center rounded-md bg-white p-2"
+                onClick={onLogout}
+              >
+                <button className="text-3xl" style={{ color: textColor }}>
+                  <IoIosExit />
+                </button>
+              </div>
+            </div>
+          )}
         </Sidebar>
 
-        {/* Modales */}
-        <ModalFormat
-          width="40%"
-          isOpen={activeModal === 'campanas'}
-          onClose={() => setActiveModal(null)}
-        >
-          <div className="flex flex-col p-10">
-            <h2 className="mb-3 text-center font-bold">
-              Selecciona el tipo de campaña que quieres crear
-            </h2>
-            <div className="flex">
-              <div className="w-3/6 p-2">
-                <CardFormat
-                  image={{ type: 'image', name: 'medios-propios' }}
-                  title="Medios Propios"
-                  description="Crea y administra campañas a los usuarios que ingresan a tus canales."
-                />
-              </div>
-              <div className="w-3/6 p-2">
-                <Link to="/thirdPartyCampaign">
-                  <CardFormat
-                    image={{ type: 'image', name: 'medios-pagos' }}
-                    title="Medios Pagos"
-                    description="Activa campañas de Marketing Digital usando inventario de Redes Sociales y Google."
-                  />
-                </Link>
+        {campaignCards.length > 0 && (
+          <ModalFormat
+            width="40%"
+            isOpen={activeModal === 'campaigns'}
+            onClose={() => setActiveModal(null)}
+          >
+            <div className="flex flex-col px-10 pb-5">
+              <h2 className="mb-3 text-center font-bold">
+                Selecciona el tipo de campaña que quieres crear
+              </h2>
+              <div className="flex">
+                {campaignCards.map((card) => (
+                  <div
+                    key={card.id}
+                    className="flex w-3/6 p-2"
+                    onClick={() => handleCardClick(card)}
+                  >
+                    <Card
+                      imageUrl={card.imageUrl}
+                      title={card.title}
+                      description={card.description}
+                    />
+                  </div>
+                ))}
               </div>
             </div>
-          </div>
-        </ModalFormat>
-
-        <ModalFormat
-          isOpen={activeModal === 'audiencias'}
-          onClose={() => setActiveModal(null)}
-        >
-          <h2>Audiencias</h2>
-          {/* Contenido del modal de audiencias */}
-        </ModalFormat>
-
-        <ModalFormat
-          isOpen={activeModal === 'reportes'}
-          onClose={() => setActiveModal(null)}
-        >
-          <h2>Reportes</h2>
-          {/* Contenido del modal de reportes */}
-        </ModalFormat>
-
-        <ModalFormat
-          isOpen={activeModal === 'facturacion'}
-          onClose={() => setActiveModal(null)}
-        >
-          <h2>Facturación</h2>
-          {/* Contenido del modal de facturación */}
-        </ModalFormat>
-
-        <ModalFormat
-          isOpen={activeModal === 'configuracion'}
-          onClose={() => setActiveModal(null)}
-        >
-          <h2>Configuración</h2>
-          {/* Contenido del modal de configuración */}
-        </ModalFormat>
+          </ModalFormat>
+        )}
       </div>
     </div>
   );
 };
 
-export default SidebarMth;
+export default SidebarPro;
