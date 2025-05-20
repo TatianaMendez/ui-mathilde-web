@@ -4,17 +4,17 @@ import { ImageFormat } from '@components/atoms/image/imageFormat';
 import styles from './card.module.css';
 import { CardProps } from './card.types';
 
-export const CardFormat = forwardRef<HTMLDivElement, CardProps>(
+export const Card = forwardRef<HTMLDivElement, CardProps>(
   (props, ref) => {
-    const { image, icon: Icon, title, description } = props;
+    const { imageUrl, icon: Icon, title, description } = props;
 
     return (
-      <div className={`${styles.cardFormat} border px-3.5 py-7`} ref={ref}>
-        {image?.type === 'image' ? (
+      <div className={`${styles.Card} border px-3.5 py-7`} ref={ref}>
+        {imageUrl ? (
           <ImageFormat
             classIm="mx-auto"
-            src={`../../../../public/assets/images/${image.name}.svg`}
-            alt={image.name}
+            src={imageUrl}
+            alt={title}
             width={74}
             height={74}
           />
@@ -30,6 +30,6 @@ export const CardFormat = forwardRef<HTMLDivElement, CardProps>(
   }
 );
 
-CardFormat.displayName = 'CardFormat';
+Card.displayName = 'Card';
 
-export default CardFormat;
+export default Card;

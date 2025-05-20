@@ -4,7 +4,7 @@ import { HiArrowRight, HiArrowLeft } from 'react-icons/hi';
 import { FaGoogle } from 'react-icons/fa';
 
 const meta = {
-  title: 'Molecules/ButtonFormat',
+  title: 'Molecules/Button',
   component: ButtonFormat,
   parameters: {
     layout: 'centered',

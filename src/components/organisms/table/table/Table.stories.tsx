@@ -1,274 +1,157 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { TableComponent } from './table';
-import type { Column } from './table';
+import { TableComponent, Column } from './table';
 import { action } from '@storybook/addon-actions';
-import { useState } from 'react';
 
 const meta = {
   title: 'Organisms/Table',
   component: TableComponent,
   parameters: {
     layout: 'centered',
-    actions: {
-      handles: ['onToggleChange']
-    }
   },
   tags: ['autodocs'],
   argTypes: {
     showSearch: {
       control: 'boolean',
-      description: 'Mostrar barra de búsqueda'
+      description: 'Mostrar barra de búsqueda',
     },
     itemsPerPage: {
       control: 'number',
-      description: 'Items por página'
+      description: 'Número de elementos por página',
     },
     title: {
       control: 'text',
-      description: 'Título de la tabla'
+      description: 'Título de la tabla',
     },
-    onToggleChange: {
-      description: 'Callback cuando cambia un toggle',
-      action: 'toggle changed'
-    }
-  }
+  },
 } satisfies Meta<typeof TableComponent>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-// Datos de ejemplo básicos
+// Datos de ejemplo
 const sampleData = [
-  {
-    id: 'p1',
-    productName: 'Apple MacBook Pro 17"',
-    color: 'Silver',
-    category: 'Laptop',
-    price: 2999,
-  },
-  {
-    id: 'p2',
-    productName: 'Microsoft Surface Pro',
-    color: 'White',
-    category: 'Laptop PC',
-    price: 1999,
-  },
-  {
-    id: 'p3',
-    productName: 'Magic Mouse 2',
-    color: 'Black',
-    category: 'Accessories',
-    price: 99,
-  }
+  { id: 1, name: 'Producto 1', status: true, price: 100 },
+  { id: 2, name: 'Producto 2', status: false, price: 200 },
+  { id: 3, name: 'Producto 3', status: true, price: 300 },
+  { id: 4, name: 'Producto 4', status: false, price: 400 },
+  { id: 5, name: 'Producto 5', status: true, price: 500 },
 ];
 
-// Columnas básicas
-const sampleColumns: Column[] = [
+// Columnas con toggle y texto
+const columnsWithToggle: Column[] = [
   {
-    header: 'Producto',
-    relation: 'productName',
+    header: 'Nombre',
+    relation: 'name',
+    sortable: true,
   },
   {
-    header: 'Color',
-    relation: 'color',
-  },
-  {
-    header: 'Categoría',
-    relation: 'category',
+    header: 'Estado',
+    relation: 'status',
+    isToggle: true,
+    toggleText: {
+      active: 'Activo',
+      inactive: 'Inactivo',
+    },
   },
   {
     header: 'Precio',
     relation: 'price',
-    cell: (row) => `$${(row.price as number).toLocaleString()}`,
+    sortable: true,
   },
 ];
 
-// Historia básica
-export const Basic: Story = {
-  args: {
-    columns: sampleColumns,
-    data: sampleData,
-    showSearch: false,
-    itemsPerPage: 5,
-  },
-};
-
-// Datos de usuarios con toggle
-const userData = [
+// Columnas con toggle sin texto
+const columnsWithoutToggleText: Column[] = [
   {
-    id: 1,
-    status: true,
-    name: 'Juan Pérez',
-    email: 'juan@ejemplo.com',
-    role: 'Admin'
+    header: 'Nombre',
+    relation: 'name',
+    sortable: true,
   },
-  {
-    id: 2,
-    status: false,
-    name: 'María García',
-    email: 'maria@ejemplo.com',
-    role: 'Editor'
-  }
-];
-
-// Columnas con un toggle
-const columnsWithToggle: Column[] = [
   {
     header: 'Estado',
     relation: 'status',
-    isToggle: true
+    isToggle: true,
   },
   {
-    header: 'Nombre',
-    relation: 'name'
+    header: 'Precio',
+    relation: 'price',
+    sortable: true,
   },
-  {
-    header: 'Email',
-    relation: 'email'
-  },
-  {
-    header: 'Rol',
-    relation: 'role',
-    cell: (row) => (
-      <span className={`px-2 py-1 rounded-full text-xs font-semibold 
-        ${row.role === 'Admin' ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-800'}`}>
-        {row.role as string}
-      </span>
-    )
-  }
 ];
 
-// Historia con toggle
-export const TableWithToggle: Story = {
+// Historia con toggle y texto
+export const WithToggleAndText: Story = {
   args: {
     columns: columnsWithToggle,
-    data: userData,
-    showSearch: true,
-    title: 'Usuarios con Toggle',
-    onToggleChange: action('toggle changed in user table')
-  }
-};
-
-// Datos de tareas con múltiples toggles
-const taskData = [
-  {
-    id: 't1',
-    name: 'Diseño de UI',
-    isActive: true,
-    isUrgent: false,
-    isCompleted: true,
-    assignedTo: 'Ana'
-  },
-  {
-    id: 't2',
-    name: 'Desarrollo Backend',
-    isActive: true,
-    isUrgent: true,
-    isCompleted: false,
-    assignedTo: 'Carlos'
-  }
-];
-
-// Columnas con múltiples toggles
-const multipleTogglesColumns: Column[] = [
-  {
-    header: 'Tarea',
-    relation: 'name'
-  },
-  {
-    header: 'Activo',
-    relation: 'isActive',
-    isToggle: true
-  },
-  {
-    header: 'Urgente',
-    relation: 'isUrgent',
-    isToggle: true
-  },
-  {
-    header: 'Completado',
-    relation: 'isCompleted',
-    isToggle: true
-  },
-  {
-    header: 'Asignado a',
-    relation: 'assignedTo'
-  }
-];
-
-// Historia con múltiples toggles
-export const TableWithMultipleToggles: Story = {
-  args: {
-    columns: multipleTogglesColumns,
-    data: taskData,
-    showSearch: true,
-    title: 'Tareas con Múltiples Toggles',
-    onToggleChange: action('toggle changed in tasks table')
-  }
-};
-
-// Datos de ejemplo con más usuarios para demostrar paginación
-const paginatedUserData = Array(15).fill(null).map((_, index) => ({
-  id: `user-${index + 1}`,
-  status: index % 2 === 0,
-  name: `Usuario ${index + 1}`,
-  email: `usuario${index + 1}@ejemplo.com`,
-  role: index % 3 === 0 ? 'Admin' : 'Editor'
-}));
-
-// Componente con estado para mantener los valores de los toggles
-const TableWithState = () => {
-  const [data, setData] = useState(paginatedUserData);
-
-  const handleToggleChange = ({ 
-    rowId, 
-    checked, 
-    columnKey 
-  }: { 
-    rowId: string | number;
-    checked: boolean;
-    columnKey: string;
-  }) => {
-    setData(prevData => 
-      prevData.map(item => 
-        item.id === rowId 
-          ? { ...item, [columnKey]: checked }
-          : item
-      )
-    );
-    action('toggle changed in paginated table')({ rowId, checked, columnKey });
-  };
-
-  return (
-    <TableComponent
-      columns={columnsWithToggle}
-      data={data}
-      showSearch={true}
-      itemsPerPage={5}
-      title="Usuarios con Toggles Persistentes"
-      onToggleChange={handleToggleChange}
-    />
-  );
-};
-
-// Historia con paginación y estado persistente
-export const TableWithPersistentToggles: Story = {
-  args: {
-    columns: columnsWithToggle,
-    data: paginatedUserData,
+    data: sampleData,
     showSearch: true,
     itemsPerPage: 5,
-    title: "Usuarios con Toggles Persistentes",
-    onToggleChange: action('toggle changed in paginated table')
+    title: 'Productos',
+    onToggleChange: action('toggle-changed'),
   },
-  render: () => <TableWithState />,
-  parameters: {
-    docs: {
-      description: {
-        story: 'Esta historia demuestra cómo los toggles mantienen su estado al cambiar de página. ' +
-               'Puedes cambiar el estado de los toggles en cualquier página y al volver, ' +
-               'el estado se mantendrá correctamente.'
-      }
-    }
-  }
+};
+
+// Historia con toggle sin texto
+export const WithToggleWithoutText: Story = {
+  args: {
+    columns: columnsWithoutToggleText,
+    data: sampleData,
+    showSearch: true,
+    itemsPerPage: 5,
+    title: 'Productos',
+    onToggleChange: action('toggle-changed'),
+  },
+};
+
+// Historia con múltiples toggles
+export const WithMultipleToggles: Story = {
+  args: {
+    columns: [
+      {
+        header: 'Nombre',
+        relation: 'name',
+        sortable: true,
+      },
+      {
+        header: 'Estado',
+        relation: 'status',
+        isToggle: true,
+        toggleText: {
+          active: 'Activo',
+          inactive: 'Inactivo',
+        },
+      },
+      {
+        header: 'Disponible',
+        relation: 'available',
+        isToggle: true,
+        toggleText: {
+          active: 'En Stock',
+          inactive: 'Sin Stock',
+        },
+      },
+      {
+        header: 'Precio',
+        relation: 'price',
+        sortable: true,
+      },
+    ],
+    data: [
+      { id: 1, name: 'Producto 1', status: true, available: false, price: 100 },
+      { id: 2, name: 'Producto 2', status: false, available: true, price: 200 },
+      { id: 3, name: 'Producto 3', status: true, available: true, price: 300 },
+      {
+        id: 4,
+        name: 'Producto 4',
+        status: false,
+        available: false,
+        price: 400,
+      },
+      { id: 5, name: 'Producto 5', status: true, available: true, price: 500 },
+    ],
+    showSearch: true,
+    itemsPerPage: 5,
+    title: 'Productos',
+    onToggleChange: action('toggle-changed'),
+  },
 };

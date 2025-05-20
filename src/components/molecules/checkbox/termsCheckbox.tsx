@@ -41,5 +41,3 @@ export const TermsCheckbox: React.FC<TermsCheckboxProps> = ({
     </div>
   );
 };
-
-export default TermsCheckbox;
