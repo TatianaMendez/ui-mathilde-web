@@ -207,7 +207,6 @@ export const TableComponent: React.FC<TableComponentProps> = ({
               </Table.HeadCell>
             ))}
           </Table.Head>
-          <hr />
 
           <Table.Body className="divide-y">
             {paginatedData.map((row) => (
